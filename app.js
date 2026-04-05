@@ -7,111 +7,149 @@ const vuetify = createVuetify();
 //action verbs: wash, groom, blow dry
 
 const App = {
- setup() {
-    const showReferenceCard = ref(false);
-    const image = "background.jpg";
-    const userAction1 = ref(null);
-    const userAction2 = ref(null);
-    const userAction3 = ref(null);
-    const result = ref(null);
-    const savedCount = ref(0); 
+    setup() {
 
-    const collection = [
-        { petName: "Cat",
-            firstAction: "Wash",
-            secondAction: "Groom",
-            thirdAction: "Blow dry",
-            buttonX: "75%",
-            buttonY: "35%",
-            cardX: "65%",
-            cardY: "50%",
-            showGameCard: ref(false),
-            result: ref(null)
-        },
-        { petName: "Dog2",
-             firstAction: "Wash",
-            secondAction: "Groom",
-            thirdAction: "Blow dry",
-            buttonX: "31%",
-            buttonY: "26%",
-            cardX: "31%",
-            cardY: "30%",
-            showGameCard: ref(false),
-            result: ref(null)
-        },
-        { machineName: "Dog1",
-             firstAction: "Wash",
-            secondAction: "Groom",
-            thirdAction: "Blow dry",
-            buttonX: "5%",
-            buttonY: "35%",
-            cardX: "5%",
-            cardY: "55%",
-            showGameCard: ref(false),
-            result: ref(null)
+        const projects = [
+            {
+                title: "Tea Card Collection",
+                description: "A card gallery featuring different teas, their tastes, smells, and short descriptions.",
+                whatILearned: "In this lab I practiced using JavaScript objects, arrays, and Vuetify cards to display a collection with images and text.",
+                image: "images/project1.png",
+                url: "https://jingyi12333.github.io/codinginquiryproject1.github.io/"
+            },
+            {
+                title: "Pet Grooming Game",
+                description: "An interactive point-and-click game where the player completes grooming actions in the correct order.",
+                whatILearned: "I learned about functions, conditional logic, and reactivity to handle changes in the user interface and validate user choices.",
+                image: "images/project2.png",
+                url: "https://jingyi12333.github.io/codinginquiryproject2.github.io/"
+            },
+            {
+                title: "Canada Immigration Dashboard",
+                description: "A data dashboard visualizing immigration trends and policy information using charts and tables.",
+                whatILearned: "I practiced using Vuetify components like Sparkline, Stepper, and Data Table to transform complex datasets into an interactive experience.",
+                image: "images/project3.png",
+                url: "https://jingyi12333.github.io/codinginquiryproject3.github.io/"
+            }
+        ];
+
+        const openDrawer = ref(false);
+
+        function toggleDrawer() {
+            openDrawer.value = !openDrawer.value;
         }
-    ]
 
-    function toggleOpenCloseReferenceCard() {
-        if (showReferenceCard.value == false) {showReferenceCard.value = true} 
-        else {showReferenceCard.value = false}
-    }
 
-    function toggleOpenCloseGameCard(item) {
-        if (!item.showGameCard.value) {
-            item.showGameCard.value = true;
+        const showReferenceCard = ref(false);
+        const image = "background.jpg";
+        const userAction1 = ref(null);
+        const userAction2 = ref(null);
+        const userAction3 = ref(null);
+        const result = ref(null);
+        const savedCount = ref(0);
 
-            //Reset user choices
-            userAction1.value = null;
-            userAction2.value = null;
-            userAction3.value = null;
-        } else {item.showGameCard.value = false}
-    }
+        const collection = [
+            {
+                petName: "Cat",
+                firstAction: "Wash",
+                secondAction: "Groom",
+                thirdAction: "Blow dry",
+                buttonX: "75%",
+                buttonY: "35%",
+                cardX: "65%",
+                cardY: "50%",
+                showGameCard: ref(false),
+                result: ref(null)
+            },
+            {
+                petName: "Dog2",
+                firstAction: "Wash",
+                secondAction: "Groom",
+                thirdAction: "Blow dry",
+                buttonX: "31%",
+                buttonY: "26%",
+                cardX: "31%",
+                cardY: "30%",
+                showGameCard: ref(false),
+                result: ref(null)
+            },
+            {
+                machineName: "Dog1",
+                firstAction: "Wash",
+                secondAction: "Groom",
+                thirdAction: "Blow dry",
+                buttonX: "5%",
+                buttonY: "35%",
+                cardX: "5%",
+                cardY: "55%",
+                showGameCard: ref(false),
+                result: ref(null)
+            }
+        ]
 
-    function recordUserAction(action) {
-        if (userAction1.value == null) {
-            userAction1.value = action;
-        } else if (userAction2.value == null) {
-            userAction2.value = action;
-        } else if (userAction3.value == null) {
-            userAction3.value = action;
+        function toggleOpenCloseReferenceCard() {
+            if (showReferenceCard.value == false) { showReferenceCard.value = true }
+            else { showReferenceCard.value = false }
+        }
+
+        function toggleOpenCloseGameCard(item) {
+            if (!item.showGameCard.value) {
+                item.showGameCard.value = true;
+
+                //Reset user choices
+                userAction1.value = null;
+                userAction2.value = null;
+                userAction3.value = null;
+            } else { item.showGameCard.value = false }
+        }
+
+        function recordUserAction(action) {
+            if (userAction1.value == null) {
+                userAction1.value = action;
+            } else if (userAction2.value == null) {
+                userAction2.value = action;
+            } else if (userAction3.value == null) {
+                userAction3.value = action;
+            }
+        }
+
+        function validateResult(item) {
+            if (userAction1.value === item.firstAction &&
+                userAction2.value === item.secondAction &&
+                userAction3.value === item.thirdAction) {
+                item.result.value = "Success!";
+                savedCount.value++;
+            } else {
+                item.result.value = "Failure.";
+
+            }
+        }
+
+        function findCoordinates(event) {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const xPercent = (event.clientX / windowWidth) * 100;
+            const yPercent = (event.clientY / windowHeight) * 100;
+            console.log(`X: ${xPercent.toFixed(2)}%, Y: ${yPercent.toFixed(2)}%`);
+        }
+
+
+        return {
+            projects,
+            openDrawer,
+            toggleDrawer,
+            showReferenceCard,
+            toggleOpenCloseReferenceCard,
+            toggleOpenCloseGameCard,
+            result,
+            recordUserAction,
+            validateResult,
+            findCoordinates,
+            image,
+            savedCount,
+            collection
         }
     }
-
-    function validateResult(item) {
-        if (userAction1.value === item.firstAction && 
-         userAction2.value === item.secondAction && 
-         userAction3.value === item.thirdAction) {
-            item.result.value = "Success!";
-            savedCount.value++;
-        } else {
-            item.result.value = "Failure.";
-  
-        }
-    }
-
-    function findCoordinates(event) {
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-        const xPercent = (event.clientX / windowWidth) * 100;
-        const yPercent = (event.clientY / windowHeight) * 100;
-        console.log(`X: ${xPercent.toFixed(2)}%, Y: ${yPercent.toFixed(2)}%`);
-    }
-
-
- return { 
-    showReferenceCard,
-    toggleOpenCloseReferenceCard,
-    toggleOpenCloseGameCard,
-    result,
-    recordUserAction,
-    validateResult,
-    findCoordinates,
-    image,
-    savedCount,
-    collection
- }
- }
 }
 
 createApp(App).use(vuetify).mount('#app');
