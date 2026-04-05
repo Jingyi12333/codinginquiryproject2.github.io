@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.x/dist/vuetify.min.js"></script>
+</head>
+  <script src="app.js" defer></script>
+<body>
+    
+<div id="app">
+    <v-app class>
+    <v-main class>
+    <v-chip style="position: absolute; z-index: 1; left:0%; top:0%;">
+    Tasks completed: {{ savedCount }} 
+    </v-chip>
+    <v-btn @click="toggleOpenCloseReferenceCard" style="position:absolute; z-index:1; left: 65%; top:10%;">Reference Card</v-btn>
+    <v-img :src="image" class="fixed-image" @click="findCoordinates"></v-img>
+
+    <v-card width="350" v-if="showReferenceCard" class="mx-auto bg-blue-accent-1 elevation-10 ma-3" style="position:absolute; z-index:1; left: 65%; top:15%;">
+        <v-card-title>Reference Card</v-card-title>
+            <v-list>
+                <v-list-item v-for ="item in collection" :key="item.machineName">
+                    <v-list-item-title>
+                        {{ item.petName }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                        {{item.firstAction}}, {{item.secondAction}}, and {{item.thirdAction}}.
+                    </v-list-item-subtitle>
+                </v-list-item>
+            </v-list>
+    </v-card>
+    <v-sheet v-for ="item in collection" :key="item.machineName">
+        <v-btn @click="toggleOpenCloseGameCard(item)" style="position:absolute; z-index:1;" :style="{left: item.buttonX, top: item.buttonY}">Game Card</v-btn>
+        <v-card width="300" v-if="item.showGameCard.value" class="mx-auto bg-blue-lighten-3 elevation-10 ma-3" style="position:absolute; z-index:1;" :style="{left: item.cardX, top: item.cardY}">
+            <v-card-title> {{ item.petName }} </v-card-title>
+            <v-btn @click="recordUserAction(item.firstAction)"> {{item.firstAction}} </v-btn>
+            <v-btn @click="recordUserAction(item.secondAction)">{{item.secondAction}}</v-btn>
+            <v-btn @click="recordUserAction(item.thirdAction)">{{item.thirdAction}}</v-btn>
+            <v-card-text>
+                {{ item.result }}
+            </v-card-text>
+            <v-card-actions>
+                <v-btn @click="validateResult(item)">Validate Result</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-sheet>
+    </v-main>
+    </v-app>
+
+</div>
+
+
+
+</body>
+</html>
